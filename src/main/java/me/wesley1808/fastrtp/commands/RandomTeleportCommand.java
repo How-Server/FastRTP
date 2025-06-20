@@ -105,6 +105,12 @@ public final class RandomTeleportCommand {
         if (!force && CooldownManager.hasCooldown(player.getUUID())) {
             String seconds = String.valueOf(CooldownManager.getCooldownInSeconds(player.getUUID()));
             player.displayClientMessage(Util.format(messages.rtpOnCooldown.replace("${seconds}", seconds)), false);
+
+            if (Config.instance().rtpBackEnabled) {
+                player.sendSystemMessage(Util.format("<yellow>將您自動傳回上個隨機點..."));
+                executeBack(player);
+            }
+
             return 0;
         }
 
