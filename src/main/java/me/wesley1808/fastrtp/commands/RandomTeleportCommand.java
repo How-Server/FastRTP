@@ -75,7 +75,9 @@ public final class RandomTeleportCommand {
     }
 
     private static int execute(CommandSourceStack source, ServerPlayer player) {
-        return execute(source, player, Util.getLevel(player));
+        ServerLevel level = Util.getLevel(player);
+        if (!isVanillaDimension(level)) level = source.getServer().getLevel(ServerLevel.OVERWORLD);
+        return execute(source, player, level);
     }
 
     private static int execute(CommandSourceStack source, ServerPlayer player, ServerLevel level) {
@@ -201,5 +203,11 @@ public final class RandomTeleportCommand {
         ConfigHandler.load();
         source.sendSuccess(() -> Component.literal("Config reloaded!").withStyle(ChatFormatting.GREEN), false);
         return Command.SINGLE_SUCCESS;
+    }
+
+    private static boolean isVanillaDimension(ServerLevel level) {
+        return level.dimension() == ServerLevel.OVERWORLD
+                || level.dimension() == ServerLevel.NETHER
+                || level.dimension() == ServerLevel.END;
     }
 }
